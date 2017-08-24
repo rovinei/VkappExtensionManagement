@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 use App\Extension;
 use Carbon\Carbon;
 use Exception;
@@ -45,18 +46,23 @@ class ExtensionManagement extends Command
         // Set locale and create datetime
         Carbon::setLocale('km');
         $date = Carbon::now('Asia/Phnom_Penh');
+        $n_relesed_ext = 0;
 
         // Relese extension
-
         try {
-            DB::table('extensions')
+            $n_relesed_ext = DB::table('extension')
                 ->whereNotNull('token')
                 ->whereNotNull('last_registered')
-                ->where('last_registered', '<=', $date->addHours(6))
+                ->where('last_registered', '<=', $date->addHours(24))
                 ->sharedLock()
                 ->update(['token'=>null,'last_registered'=>null]);
+
+            $this->line("[".Carbon::now('Asia/Phnom_Penh')."], Success, Successfully released ".$n_relesed_ext." extensions.");
+
         } catch (Exception $e) {
 
+            Log::info("Error releasing extension");
+            $this->line("[".Carbon::now('Asia/Phnom_Penh')."], Error, Error while releasing extensions.");
         }
 
     }
