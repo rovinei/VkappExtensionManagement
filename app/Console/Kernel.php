@@ -25,7 +25,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('extension:release')
-                ->everyMinute()
+                ->dailyAt('1:00')
                 ->withoutOverlapping()
                 ->appendOutputTo(base_path('storage/logs/release_ext_cron.txt'));
     }

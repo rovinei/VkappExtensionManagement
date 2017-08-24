@@ -53,9 +53,9 @@ class ExtensionManagement extends Command
             $n_relesed_ext = DB::table('extensions')
                 ->whereNotNull('token')
                 ->whereNotNull('last_registered')
-                ->where('last_registered', '<=', $date->addHours(24))
+                ->where('last_registered', '<=', $date->subDays(3))
                 ->sharedLock()
-                ->update(['token'=>null,'last_registered'=>null]);
+                ->update(['status'=>1, 'token'=>null,' last_registered'=>null]);
 
             $this->line("[".Carbon::now('Asia/Phnom_Penh')."], Success, Successfully released ".$n_relesed_ext." extensions.");
 
