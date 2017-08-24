@@ -55,7 +55,7 @@ class ExtensionManagement extends Command
                 ->whereNotNull('last_registered')
                 ->where('last_registered', '<=', $date->subDays(3))
                 ->sharedLock()
-                ->update(['status'=>1, 'token'=>null,' last_registered'=>null]);
+                ->update(['status'=>1, 'token'=>null, 'last_registered'=>null]);
 
             $this->line("[".Carbon::now('Asia/Phnom_Penh')."], Success, Successfully released ".$n_relesed_ext." extensions.");
 
