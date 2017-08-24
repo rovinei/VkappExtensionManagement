@@ -27,7 +27,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('extension:release')
                 ->everyMinute()
                 ->withoutOverlapping()
-                ->appendOutputTo(base_path('storage/logs/release_ext_cron.log'));
+                ->appendOutputTo(base_path('storage/logs/release_ext_cron.txt'));
     }
 
     /**

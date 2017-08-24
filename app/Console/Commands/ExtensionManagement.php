@@ -52,7 +52,7 @@ class ExtensionManagement extends Command
             DB::table('extensions')
                 ->whereNotNull('token')
                 ->whereNotNull('last_registered')
-                ->where('last_registered', '<=', $date->subMinutes(3))
+                ->where('last_registered', '<=', $date->subHours(3))
                 ->sharedLock()
                 ->update(['token'=>null,'last_registered'=>null]);
         } catch (Exception $e) {
