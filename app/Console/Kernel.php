@@ -13,7 +13,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
+        \App\Console\Commands\ExtensionManagement::class
     ];
 
     /**
@@ -24,8 +24,10 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
+        $schedule->command('extension:release')
+                ->everyMinute()
+                ->withoutOverlapping()
+                ->appendOutputTo(base_path('storage/logs/release_ext_cron.log'));
     }
 
     /**
