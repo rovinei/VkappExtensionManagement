@@ -50,7 +50,7 @@ class ExtensionManagement extends Command
 
         // Relese extension
         try {
-            $n_relesed_ext = DB::table('extension')
+            $n_relesed_ext = DB::table('extensions')
                 ->whereNotNull('token')
                 ->whereNotNull('last_registered')
                 ->where('last_registered', '<=', $date->addHours(24))
