@@ -15,6 +15,7 @@ class Extension extends Model
         'extension',
         'status',
         'last_registered',
-        'token'
+        'token',
+        'customer_name'
     ];
 }

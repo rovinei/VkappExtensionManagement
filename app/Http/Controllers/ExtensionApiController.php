@@ -54,6 +54,7 @@ class ExtensionApiController extends Controller
     public function getExtension(Request $request){
 
         $user_uuid = $request->headers->get('VKAPP-USERID');
+        $username = $request->headers->get('VKAPP-USERNAME');
 
         DB::beginTransaction();
         try {
@@ -110,6 +111,7 @@ class ExtensionApiController extends Controller
     public function triggerExtension(Request $request){
 
         $user_uuid = $request->headers->get('VKAPP-USERID');
+        $username = $request->headers->get('VKAPP-USERNAME');
         $reserved_token = $request->input('reserved_token');
         $ext = $request->input('ext');
         $action = $request->input('action');
@@ -180,7 +182,9 @@ class ExtensionApiController extends Controller
                 try {
                     $extension->update([
                         'status' => 0,
-                        'last_registered' => Carbon::now('Asia/Phnom_Penh')->format('Y-m-d H:i:s')]);
+                        'last_registered' => Carbon::now('Asia/Phnom_Penh')->format('Y-m-d H:i:s'),
+                        'customer_name' => $username
+                        ]);
                     $response_text = "registered";
                 } catch (QueryException $e) {
                     DB::rollback();
@@ -205,7 +209,7 @@ class ExtensionApiController extends Controller
 
             case 'release':
                 try {
-                    $extension->update(['status' => 1, 'last_registered' => null, 'token' => null]);
+                    $extension->update(['status' => 1, 'last_registered' => null, 'token' => null, 'customer_name' => null]);
                     $response_text = "released";
                 } catch (QueryException $e) {
                     DB::rollback();
