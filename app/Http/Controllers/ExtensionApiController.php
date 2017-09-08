@@ -178,7 +178,9 @@ class ExtensionApiController extends Controller
         switch ($action) {
             case 'register':
                 try {
-                    $extension->update(['status' => 0, 'last_registered' => Carbon::now()->format('Y-m-d H:i:s')]);
+                    $extension->update([
+                        'status' => 0,
+                        'last_registered' => Carbon::now('Asia/Phnom_Penh')->format('Y-m-d H:i:s')]);
                     $response_text = "registered";
                 } catch (QueryException $e) {
                     DB::rollback();
