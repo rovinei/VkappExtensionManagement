@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Extension;
 use Exception;
 use DB;
+use Log;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use Carbon\Carbon;
@@ -97,6 +98,7 @@ class ExtensionApiController extends Controller
         }
 
         DB::commit();
+	Log::info('User request extension : '.$extension->extension);
         return response()->json([
             'code' => 200,
             'success' => [
@@ -245,6 +247,7 @@ class ExtensionApiController extends Controller
 
 
         DB::commit();
+	Log::info('User update extension  : '.$ext);
         return response()->json([
             'code' => 200,
             'success' => [
