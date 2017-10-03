@@ -15,43 +15,6 @@ use App\Helpers\UUID;
 class ExtensionApiController extends Controller
 {
 
-    public function getExtensionsList(Request $request){
-
-        // Fetch all extensions
-        try {
-            $extions_list = Extension::orderBy('extension', 'desc')->get();
-            sleep(30);
-        } catch (QueryException $e){
-            return response()->json([
-                'code' => 505,
-                'error' => [
-                    'message' => 'Oop! Something went wrong, while trying to fecth extensions.',
-                    'exception' => $e
-                ]
-            ]);
-        } catch (Exception $e) {
-            return response()->json([
-                'code' => 504,
-                'error' => [
-                    'message' => 'Oop! Something went wrong, while trying to fecth extensions.',
-                    'exception' => $e
-                ]
-            ]);
-        }
-
-        return response()->json([
-            'code' => 200,
-            'success' => [
-                'message' => 'Successfully fecthed extensions',
-                'data' => $extions_list
-            ]
-        ]);
-    }
-
-    public function checkExtension(Request $request, $ext_number){
-
-    }
-
     public function getExtension(Request $request){
 
         $user_uuid = $request->headers->get('VKAPP-USERID');
@@ -65,7 +28,7 @@ class ExtensionApiController extends Controller
                 ->whereNull('token')
                 ->lockForUpdate()->firstOrFail();
             $uuid = UUID::generate(40, Extension::class, 'token');
-            $extension->update(['token' => $uuid]);
+            $extension->update(['token' => $uuid, 'customer_name' => $username, 'status' => 0]);
         } catch (ModelNotFoundException $e) {
             DB::rollback();
             return response()->json([
@@ -98,7 +61,7 @@ class ExtensionApiController extends Controller
         }
 
         DB::commit();
-	Log::info('User request extension : '.$extension->extension);
+	    Log::info('User ['.$username.'] request extension : '.$extension->extension);
         return response()->json([
             'code' => 200,
             'success' => [
@@ -247,11 +210,12 @@ class ExtensionApiController extends Controller
 
 
         DB::commit();
-	Log::info('User update extension  : '.$ext);
+	    Log::info('User '.$username.' update extension  : '.$ext);
         return response()->json([
             'code' => 200,
             'success' => [
-                'message' => 'Successfully '.$response_text.' extension : '.$ext
+                'message' => 'Successfully '.$response_text.' extension : '.$ext,
+		'extension' => $extension
             ]
         ]);
 
