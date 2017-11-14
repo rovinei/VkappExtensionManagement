@@ -23,5 +23,8 @@ Route::group(['middleware' => 'api', 'prefix' => 'v.1'], function(){
     Route::match(['options', 'get'], '/extension/{ext_number}', 'ExtensionApiController@checkExtension')->name('api.check_extension')->middleware('apitoken');
     Route::match(['options', 'get'],'/get-extension', 'ExtensionApiController@getExtension')->name('api.get_extension')->middleware('apitoken');
     Route::match(['options', 'post'],'/trigger-extension', 'ExtensionApiController@triggerExtension')->name('api.trigger_extensions')->middleware('apitoken');
+
+    Route::match(['options', 'get'],'/get_service_extensions', 'ExtensionApiController@getServiceExtensions')->name('api.get_service_extensions')->middleware('apitoken');
+    
 });
 

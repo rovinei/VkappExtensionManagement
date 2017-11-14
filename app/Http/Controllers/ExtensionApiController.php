@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Extension;
 use Exception;
+use App\LocalServiceExtension;
 use DB;
 use Log;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -219,5 +220,39 @@ class ExtensionApiController extends Controller
             ]
         ]);
 
+    }
+
+    /*
+     * Function getServiceExtensions
+     * Params :
+     *  => request
+    */
+    public function getServiceExtensions(Request $request){
+        $user_uuid = $request->headers->get('VKAPP-USERID');
+        $username = $request->headers->get('VKAPP-USERNAME');
+        
+        try{
+            $service_extensions = LocalServiceExtension::where('status', 1)->get();
+        } catch (QueryException $e){
+            return response()->json([
+                'code' => 500,
+                'error' => [
+                    'message' => 'Oop! Something went wrong, query exception error.',
+                    'exception' => $e
+                ]
+            ]);
+        } catch (Exception $e){
+            return response()->json([
+                'code' => 505,
+                'error' => [
+                    'message' => 'Oop! Something went wrong, failed to fetch service extensions.',
+                    'exception' => $e
+                ]
+            ]);
+        }
+        return response()->json([
+            'service_extensions' => $service_extensions
+        ]);
+        
     }
 }
