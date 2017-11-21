@@ -251,6 +251,7 @@ class ExtensionApiController extends Controller
             ]);
         }
         return response()->json([
+	    'code' => 200,
             'service_extensions' => $service_extensions
         ]);
         
